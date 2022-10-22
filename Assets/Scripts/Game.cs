@@ -27,8 +27,10 @@ public class Game : MonoBehaviour
         Vector3 newPosition = new Vector3(0, 0, transform.position.z + tempVec.z);
         if (Input.GetMouseButton(1))
         {
-            Controls.Bounce();
+            moveX = transform.position.x;
+            newPosition = new Vector3(moveX, 0, transform.position.z + tempVec.z);
             Rigidbody.MovePosition(newPosition);
+            Controls.Bounce();            
         }
         else
         {
