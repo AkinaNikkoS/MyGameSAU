@@ -8,6 +8,8 @@ public class Game : MonoBehaviour
     public float Speed;
     public Rigidbody Rigidbody;
     public float Sensitivity;
+    public GameObject WonUI;
+    public GameObject LossUI;
     public enum State
     {
         Playing,
@@ -54,7 +56,9 @@ public class Game : MonoBehaviour
         if (CurrentState != State.Playing) return;
         CurrentState = State.Loss;
         Controls.enabled = false;
+        LossUI.SetActive(true);
         Debug.Log("Game Over!");
+        tempVec.z = 0;
     }
 
 
@@ -63,7 +67,9 @@ public class Game : MonoBehaviour
         if (CurrentState != State.Playing) return;
         CurrentState = State.Won;
         Controls.enabled = false;
+        WonUI.SetActive(true);
         Debug.Log("You Won!");
+        tempVec.z = 0;
     }
       
 }
