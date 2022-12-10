@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    public GameObject[] ObstaclePrephabs;
     public Player Controls;
     public float Speed;
     public Rigidbody Rigidbody;
@@ -29,10 +28,13 @@ public class Game : MonoBehaviour
         Vector3 newPosition = new Vector3(0, 0, transform.position.z + tempVec.z);
         if (Input.GetMouseButton(1))
         {
-            moveX = transform.position.x;
-            newPosition = new Vector3(moveX, 0, transform.position.z + tempVec.z);
-            Rigidbody.MovePosition(newPosition);
-            Controls.Bounce();            
+            if (CurrentState == State.Playing)
+            {
+                moveX = transform.position.x;
+                newPosition = new Vector3(moveX, 0, transform.position.z + tempVec.z);
+                Rigidbody.MovePosition(newPosition);
+                Controls.Bounce();
+            }
         }
         else
         {
@@ -71,5 +73,5 @@ public class Game : MonoBehaviour
         Debug.Log("You Won!");
         tempVec.z = 0;
     }
-      
+   
 }
