@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     public float BounceSpeed;
     public Rigidbody Rigidbody;
-    public Transform Transform; 
+    public Transform Transform;
     public Game Game;
     public Text Lives;
     public Text Food;
@@ -18,7 +18,8 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        Coins.text = "+ " + (50+50*lives).ToString();
+        coins = 50 * lives + 50;
+        Coins.text = "+ " + coins.ToString();
         Food.text = "+ " + food.ToString();
         Gems.text = "+ " + gems.ToString();
     }
@@ -33,23 +34,30 @@ public class Player : MonoBehaviour
         {
             lives--;
             Lives.text = lives.ToString();
-            if (lives <= 0) Game.OnPlayerDied();
-            coins = 50 * (lives + 1);
+            coins -= 50;
             Coins.text = "+ " + coins.ToString();
+            if (lives <= 0) Game.OnPlayerDied();
         }
 
         if (other.gameObject.tag == "Food")
         {
             food++;
-            Destroy(other);
+            Destroy(other.gameObject);
             Food.text = "+ " + food.ToString();
         }
 
-        if (other.gameObject.tag == "Gems")
+        if (other.gameObject.tag == "Gem")
         {
             gems++;
-            Destroy(other);
+            Destroy(other.gameObject);
             Gems.text = "+ " + gems.ToString();
+        }
+
+        if (other.gameObject.tag == "Coin")
+        {
+            coins += 10;
+            Destroy(other.gameObject);
+            Coins.text = "+ " + coins.ToString();
         }
 
         if (other.gameObject.tag == "Finish") Game.OnPlayerWon();

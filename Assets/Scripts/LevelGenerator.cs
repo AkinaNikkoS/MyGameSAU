@@ -26,7 +26,7 @@ public class LevelGenerator : MonoBehaviour
         int gemsCount = RandomRange(random, MinObstacle / 30 + 1, MaxObstacle / 30 + 2);
         int petsNumber = RandomRange(random, 0, 5);
 
-        for (int i = 0; i < obstaclesCount; i++)
+        for (int i = 1; i < obstaclesCount + 1; i++)
         {
             int prefabIndex = RandomRange(random, 0, ObstaclePrefabs.Length);
             GameObject obstaclePrefab = i == 0 ? FirstObstaclePrefab : ObstaclePrefabs[prefabIndex];
@@ -34,9 +34,9 @@ public class LevelGenerator : MonoBehaviour
             obstacle.transform.localPosition = CalculateObstaclePosition(i, obstacle.transform.localPosition);
         }
 
-        for (int i = 0; i < gemsCount + 1; i++)
+        for (int i = 0; i < gemsCount ; i++)
         {             
-            numberGemsPlaces.Add(GemPlace(coinsCount + gemsCount + 1, numberGemsPlaces));
+            numberGemsPlaces.Add(GemPlace(coinsCount + gemsCount, numberGemsPlaces));
             Debug.Log(numberGemsPlaces[i]);
         }
                 
@@ -50,17 +50,20 @@ public class LevelGenerator : MonoBehaviour
                 {
                     GameObject gem = Instantiate(GemPrefab, transform);                    
                     gem.transform.localPosition = CalculateCoinPosition(i, obstacleToCoins, gem.transform.localPosition);
+                    break;
                 }
                 else
                 {
-                    GameObject coin = Instantiate(CoinPrefab, transform);                    
-                    coin.transform.localPosition = CalculateCoinPosition(i, obstacleToCoins, coin.transform.localPosition);
-                }
-            }
-            
+                    if (j == numberGemsPlaces.Count - 1)
+                    {
+                        GameObject coin = Instantiate(CoinPrefab, transform);
+                        coin.transform.localPosition = CalculateCoinPosition(i, obstacleToCoins, coin.transform.localPosition);
+                    }
+                }                
+            }            
         }                      
         
-        FinishObstacle.localPosition = CalculateObstaclePosition(obstaclesCount, FinishObstacle.transform.localPosition);
+        FinishObstacle.localPosition = CalculateObstaclePosition(obstaclesCount + 1, FinishObstacle.transform.localPosition);
         AroundRoot.localScale = new Vector3(1, 1, obstaclesCount * DistanceBetweenObstacles/9 + ExtraRiverScale);
     }
 

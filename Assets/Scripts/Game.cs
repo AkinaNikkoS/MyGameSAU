@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class Game : MonoBehaviour
     public float Sensitivity;
     public GameObject WonUI;
     public GameObject LossUI;
+    public Text LevelNumber;
+    public int Level = 1;
     public enum State
     {
         Playing,
@@ -40,12 +44,15 @@ public class Game : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                Vector3 moveSide = Input.mousePosition - _previousMousePosition;
-                moveSide = moveSide.normalized * Speed * Sensitivity * Time.deltaTime;
-                moveX = transform.position.x - moveSide.x;
+                if (CurrentState == State.Playing)
+                {
+                    Vector3 moveSide = Input.mousePosition - _previousMousePosition;
+                    moveSide = moveSide.normalized * Speed * Sensitivity * Time.deltaTime;
+                    moveX = transform.position.x - moveSide.x;
 
-                if (-4 > moveX) moveX = -4f;
-                else { if (moveX > 4) moveX = 4f; }
+                    if (-4 > moveX) moveX = -4f;
+                    else { if (moveX > 4) moveX = 4f; }
+                }                
             }
 
             newPosition = new Vector3 (moveX, 0, transform.position.z + tempVec.z);
@@ -63,7 +70,6 @@ public class Game : MonoBehaviour
         tempVec.z = 0;
     }
 
-
     public void OnPlayerWon()
     {
         if (CurrentState != State.Playing) return;
@@ -73,5 +79,28 @@ public class Game : MonoBehaviour
         Debug.Log("You Won!");
         tempVec.z = 0;
     }
-   
+
+    public void OnPlayerRestart()
+    {
+        LossUI.SetActive(false);
+        ReloadLevel(Level);
+        LevelNumber.text = "Level " + Level.ToString();
+    }
+    public void OnPlayerNextLevel()
+    {       
+        if (CurrentState != State.Won) return;
+        if (Level == 1) ReloadLevel(Level);
+        else
+        {
+            WonUI.SetActive(false);           
+            CurrentState = State.Playing;
+            Controls.enabled = true;
+        }
+    }
+
+    public void ReloadLevel(int level)
+    {
+        SceneManager.LoadScene("LevelRiver");
+        LevelNumber.text = "Level " + level.ToString();
+    }
 }
