@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelRiver.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Farm.unity
+    guid: dc801b98d3fd2604b92eb8c295adcf4d
   m_configObjects: {}

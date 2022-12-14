@@ -11,6 +11,11 @@ public class Game : MonoBehaviour
     public float Sensitivity;
     public GameObject WonUI;
     public GameObject LossUI;
+    public GameObject PlayUI;
+    public GameObject PauseUI;
+    public GameObject MenuUI;
+    public GameObject FarmUI;
+    public Transform Camera;
     public Text LevelNumber;
     public int Level = 1;
     public enum State
@@ -18,6 +23,8 @@ public class Game : MonoBehaviour
         Playing,
         Won,
         Loss,
+        Menu,
+        Pause,
     }
 
     public State CurrentState { get; private set; }
@@ -80,6 +87,21 @@ public class Game : MonoBehaviour
         tempVec.z = 0;
     }
 
+    public void OnPlayerPause()
+    {
+        Controls.enabled = false;
+        tempVec.z = 0;
+        PlayUI.SetActive(false);
+        PauseUI.SetActive(true);
+    }
+    public void OnPlayerPlay()
+    {
+        PauseUI.SetActive(false);
+        PlayUI.SetActive(true);
+        Controls.enabled = true;
+        tempVec.z = -1;
+    }
+
     public void OnPlayerRestart()
     {
         LossUI.SetActive(false);
@@ -97,10 +119,37 @@ public class Game : MonoBehaviour
             Controls.enabled = true;
         }
     }
+    
+    public void OnPlayerMenu()
+    {
+        CurrentState = State.Menu;
+        Controls.enabled = false;
+        PlayUI.SetActive(false);
+        WonUI.SetActive(false);
+        LossUI.SetActive(false);
+        MenuUI.SetActive(true);
+        Debug.Log("Menu");
+        tempVec.z = 0;
+    }
 
     public void ReloadLevel(int level)
     {
         SceneManager.LoadScene("LevelRiver");
+        MenuUI.SetActive(false);
         LevelNumber.text = "Level " + level.ToString();
+    }
+
+    public void GoToFarm()
+    {
+        Camera.localPosition = new Vector3(100f, 4.4f, -10f);
+        FarmUI.SetActive(true);
+        MenuUI.SetActive(false);
+    }
+
+    public void BackFromFarm()
+    {
+        Camera.localPosition = new Vector3(0f, 4.4f, -10f);
+        FarmUI.SetActive(false);
+        MenuUI.SetActive(true);
     }
 }
